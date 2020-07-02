@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-    'corsheaders'
+    'corsheaders',
+    'fcm_django',
+    'sslserver',
 ]
 
 SITE_ID = 1
@@ -68,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api_crud.middlewares.DisableCsrfCheck',
 ]
 
 ROOT_URLCONF = 'api_crud.urls'
@@ -141,3 +144,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAAiF7bjnY:APA91bH4tDdPhXUsIylgRt3fx8m-S6vss11I9G1TXVtema8qld3_gr-1w6Av0Hro-mj8as2ZkazRTAXMbMpmjcSA4DO9wUx_55wBELe9XnCx6515_1bnIfYblPuAQh7T8mFPS5kOb1ok"
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+
+# plug in local settings if any
+PROJECT_APP = os.path.basename(BASE_DIR)
+f = os.path.join(PROJECT_APP, 'local_settings.py')
+if os.path.exists(f):
+    import sys
+    import imp
+    module_name = '%s.local_settings' % PROJECT_APP
+    module = imp.new_module(module_name)
+    module.__file__ = f
+    sys.modules[module_name] = module
+    exec(open(f, 'rb').read())
