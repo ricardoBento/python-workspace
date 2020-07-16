@@ -25,8 +25,10 @@ SECRET_KEY = 'k8b^y952f(10ox6993@h0q3-+&d_r#-g!qu+1zpggva_kux)2x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    '*'
+]
+APPEND_SLASH = False
 
 # Application definition
 
@@ -64,7 +66,9 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost",
     "http://localhost:8100",
     "http://localhost:8101",
-    "https://ionic-pwa-2301.web.app"
+    "https://ionic-pwa-2301.web.app",
+    "http://192.168.128.25:8080",
+    "http://192.168.8.124:8100"
 ]
 
 ROOT_URLCONF = 'todoapp.urls'
